@@ -7,7 +7,7 @@ public class TransportSystem {
             System.out.println("║   TRANSPORT SYSTEM - JAVA COLLECTIONS FRAMEWORK DEMO      ║");
             System.out.println("╚════════════════════════════════════════════════════════════╝\n");
 
-            // Create TransportManager (demonstrates Set and Map collections)
+
             TransportManager manager = new TransportManager();
 
             // Create routes with validation
