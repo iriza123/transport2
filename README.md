@@ -1,143 +1,199 @@
-# Transport System
+# Transport Management System
 
-A Java-based transport management system demonstrating OOP principles including inheritance, abstraction, polymorphism, comprehensive exception handling, **Java Collections Framework**, and **File I/O for data persistence**.
+A comprehensive JavaFX-based transport management system implementing OOP principles, collections framework, exception handling, and file I/O operations.
 
-## Structure
+## Features
 
-The system models a public transport network with three vehicle types: Bus, Taxi, and Train. Each vehicle operates on routes and serves passengers with real-world constraints and validations.
+### Core Functionality
+- Vehicle management (Bus, Taxi, Train)
+- Passenger management
+- Route management
+- Taxi zone operations
+- Real-time availability tracking
+- Data persistence with file I/O
 
-## Classes
+### Technical Implementation
+- Object-Oriented Programming with inheritance and polymorphism
+- Generic collections for type safety
+- Custom exception handling
+- JavaFX user interface with MVC architecture
+- Thread-safe UI updates
+- Real-life transportation logic
 
-- **Vehicle** (abstract): Base class with plate number, fuel level, consumption tracking, and movement behavior
-- **Bus**: Fixed-route vehicle with **List<Passenger>** for passenger management
-- **Taxi**: On-demand vehicle with driver, availability checking, and trip completion tracking
-- **Train**: Rail-based vehicle with **List<String>** for ordered stops management
-- **Passenger**: Users with ID who book trips on vehicles
-- **Route**: Defines origin, destination, and distance with validation
-- **TransportManager**: Manages vehicles using **Set** and **Map** collections
-- **TransportSystem**: Main class demonstrating the system with all features
+## Project Structure
 
-## Key Features
-
-### File I/O (Input/Output) Operations
-**Demonstrates data persistence through reading and writing to files:**
-
-1. **Writing Data (Output Operations)**
-   - `saveVehicles()` - Write vehicle data to file
-   - `saveRoutes()` - Write route data to file
-   - `savePassengers()` - Write passenger data to file
-   - `appendLog()` - Append system logs
-   - `exportSystemReport()` - Generate comprehensive reports
-
-2. **Reading Data (Input Operations)**
-   - `loadVehicles()` - Read vehicle data from file
-   - `loadRoutes()` - Read route data from file
-   - `loadPassengers()` - Read passenger data from file
-   - `readLogs()` - Retrieve system logs
-
-3. **File I/O Features**
-   - Uses `BufferedReader` and `BufferedWriter` for efficient I/O
-   - Proper exception handling with try-catch blocks
-   - Data persistence across program restarts
-   - Human-readable text file format
-   - Automatic directory creation
-
-### Java Collections Framework
-**Demonstrates real-world relationships using appropriate collection types:**
-
-1. **List<Passenger> in Bus**
-   - Relationship: One-to-Many (One Bus → Many Passengers)
-   - Justification: Order matters for boarding sequence, allows indexed access
-   - Operations: add, remove, get, contains, display
-
-2. **Set<Vehicle> in TransportManager**
-   - Relationship: Unique Collection (No duplicate vehicles)
-   - Justification: Each vehicle must be unique based on plate number
-   - Operations: add, remove, contains, size
-
-3. **Map<String, List<Taxi>> in TransportManager**
-   - Relationship: Key-Value with One-to-Many (Zone → Multiple Taxis)
-   - Justification: Fast lookup of taxis by zone/area
-   - Operations: put, get, keySet, values
-
-4. **Map<String, Route> in TransportManager**
-   - Relationship: Key-Value (Route ID → Route Object)
-   - Justification: O(1) lookup for routes by unique identifier
-   - Operations: put, get, remove, containsKey
-
-5. **List<String> in Train**
-   - Relationship: One-to-Many (One Train → Many Stops)
-   - Justification: Maintains ordered sequence of stops
-   - Operations: add, remove, get (for next stop)
-
-### Real-Life Logic
-- **Taxi Availability**: Checks availability before booking to prevent double-booking
-- **Fuel Consumption**: Vehicles consume fuel based on distance and type
-- **Capacity Management**: Buses track passengers and prevent overcrowding
-- **Fuel Validation**: Vehicles check fuel levels before moving
-- **Trip Completion**: Taxis track current passengers and complete trips
-
-### Exception Handling
-Custom exceptions in `exceptions/` package:
-- `VehicleNotAvailableException`: Prevents booking unavailable vehicles
-- `InsufficientFuelException`: Ensures adequate fuel for operations
-- `CapacityExceededException`: Prevents bus overcrowding
-- `InvalidRouteException`: Validates route parameters
-
-### Additional Features
-- Passenger ID tracking for better identification
-- Input validation throughout (null checks, empty strings, negative values)
-- Detailed error messages for debugging
-- Train delay reasons and resume functionality
-- Available seats tracking for buses
-
-## Running
-
-### Using IntelliJ IDEA (Recommended)
-1. Open the project in IntelliJ IDEA
-2. Right-click on `src/TransportSystemWithFileIO.java` (for File I/O demo)
-3. Or right-click on `src/TransportSystem.java` (for Collections demo)
-4. Select "Run 'TransportSystemWithFileIO.main()'" or "Run 'TransportSystem.main()'"
-
-### Using Command Line
-```bash
-# Compile all files
-javac src/*.java src/exceptions/*.java src/io/*.java
-
-# Run Collections Framework demo
-java -cp src TransportSystem
-
-# Run File I/O demonstration
-java -cp src TransportSystemWithFileIO
+```
+src/main/java/com/transport/
+├── backend/              - Business logic layer
+│   ├── Vehicle.java      - Abstract base class
+│   ├── Bus.java          - Bus implementation
+│   ├── Taxi.java         - Taxi implementation
+│   ├── Train.java        - Train implementation
+│   ├── Passenger.java    - Passenger entity
+│   ├── Route.java        - Route entity
+│   ├── TransportManager.java - Main manager class
+│   ├── exceptions/       - Custom exceptions
+│   └── io/              - File I/O operations
+├── controller/          - MVC controller layer
+│   └── TransportController.java
+└── ui/                  - JavaFX UI layer
+    ├── TransportApp.java
+    ├── MainView.java
+    └── components/      - UI panels
 ```
 
-The demos showcase:
-- **File I/O Operations**: Writing and reading data from files
-- **Data Persistence**: Saving and loading system state
-- **Collections Framework**: List, Set, and Map operations
-- **Bus Operations**: Passenger management with List collection
-- **Taxi Management**: Zone-based lookup with Map collection
-- **Train Operations**: Ordered stops with List collection
-- **Vehicle Registry**: Unique vehicles with Set collection
-- **Route Management**: Fast lookup with Map collection
-- **Exception Handling**: Comprehensive error scenarios
-- **Real-life Logic**: Availability checks, fuel management, capacity limits
+## Technologies Used
 
-## File I/O Data Files
+- Java 11
+- JavaFX 17.0.2
+- Maven 3.x
+- Collections Framework (List, Set, Map)
+- BufferedReader/BufferedWriter for file I/O
 
-After running the File I/O demo, check the `data/` directory:
-- `vehicles.txt` - Vehicle registration data
-- `routes.txt` - Route information
-- `passengers.txt` - Passenger records
-- `system.log` - System event logs
-- `system_report.txt` - Exported system reports
+## Requirements
 
-## Collections Summary
+- JDK 11 or higher
+- Maven 3.x
+- JavaFX 17.0.2 (managed by Maven)
 
-| Collection Type | Used In | Relationship | Justification |
-|----------------|---------|--------------|---------------|
-| `List<Passenger>` | Bus | One-to-Many | Ordered passengers, boarding sequence |
-| `Set<Vehicle>` | TransportManager | Unique Collection | No duplicate vehicles |
-| `Map<String, List<Taxi>>` | TransportManager | Key-Value + One-to-Many | Zone-based taxi lookup |
-| `Map<String, Route>` | TransportManager | Key-Value | Fast route lookup by ID |
-| `List<String>` | Train | One-to-Many | Ordered sequence of stops |
+## Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/iriza123/transport2.git
+cd transport2
+```
+
+2. Build the project
+```bash
+mvn clean install
+```
+
+## Running the Application
+
+### Using Maven
+```bash
+mvn javafx:run
+```
+
+### Using IntelliJ IDEA
+1. Open the project in IntelliJ IDEA
+2. Right-click on `TransportApp.java`
+3. Select "Run 'TransportApp.main()'"
+
+## Usage
+
+### Adding Vehicles
+1. Navigate to the Vehicles tab
+2. Select vehicle type (Bus, Taxi, or Train)
+3. Enter vehicle details
+4. Click "Add Vehicle"
+
+### Managing Passengers
+1. Navigate to the Passengers tab
+2. Enter passenger name and ID
+3. Click "Add Passenger"
+
+### Creating Routes
+1. Navigate to the Routes tab
+2. Enter route ID, origin, destination, and distance
+3. Click "Add Route"
+
+### Searching Taxi Zones
+1. Navigate to the Taxi Zones tab
+2. Enter zone name
+3. Click "Search Zone"
+
+### Saving and Loading Data
+- Click "Save Data" button to persist all data to files
+- Click "Load Data" button to restore data from files
+
+## Data Persistence
+
+The system saves data to the following files:
+- `data/vehicles.txt` - Vehicle information
+- `data/routes.txt` - Route information
+- `data/passengers.txt` - Passenger information
+- `data/system.log` - System activity log
+
+## Collections Implementation
+
+### List (One-to-Many Relationship)
+- Bus passengers: Ordered collection of passengers on a bus
+- Train stops: Sequential list of train stations
+
+### Set (Unique Collection)
+- Registered vehicles: Ensures no duplicate vehicles
+
+### Map (Key-Value Lookup)
+- Routes: Fast lookup by route ID
+- Taxi zones: Groups taxis by zone for efficient searching
+
+## Exception Handling
+
+Custom exceptions for robust error control:
+- `CapacityExceededException` - When vehicle capacity is exceeded
+- `InsufficientFuelException` - When vehicle has insufficient fuel
+- `InvalidRouteException` - When route validation fails
+- `VehicleNotAvailableException` - When vehicle is not available for booking
+
+## Real-Life Logic
+
+### Passenger Management
+- Tracks if passenger is currently on a trip
+- Prevents double-booking
+- Links passenger to current vehicle
+
+### Taxi Operations
+- Availability checking (not busy and sufficient fuel)
+- Zone-based operations
+- Earnings and trip tracking
+- Automatic status updates
+
+### Bus Operations
+- In-service/out-of-service status
+- Capacity management with validation
+- Current stop tracking
+- Cannot take bus offline with passengers on board
+
+### Train Operations
+- Operational/delayed status management
+- Capacity calculation based on number of cars
+- Stop sequence tracking
+- Delay management with reason tracking
+
+## Architecture
+
+The system follows MVC (Model-View-Controller) architecture:
+
+- **Model**: Backend classes (Vehicle, Passenger, Route, etc.)
+- **View**: JavaFX UI components (panels, layouts)
+- **Controller**: TransportController bridges UI and backend
+
+### Thread Safety
+UI updates are performed on the JavaFX Application Thread using `Platform.runLater()` to ensure thread safety.
+
+## Documentation
+
+Additional documentation files:
+- `REQUIREMENTS_VERIFICATION.md` - Detailed requirements verification
+- `REAL_LIFE_FEATURES.md` - Real-life transportation logic documentation
+- `ENHANCEMENTS_SUMMARY.md` - Summary of system enhancements
+- `QUICK_REFERENCE.md` - Quick reference guide
+- `FINAL_REQUIREMENTS_CHECKLIST.md` - Complete requirements checklist
+
+## Testing
+
+Sample test data is provided in the documentation. The system includes:
+- Input validation
+- Error handling with clear messages
+- Real-time UI updates
+- Data persistence verification
+
+## License
+
+This project is created for educational purposes.
+
+## Author
+
+Transport Management System - JavaFX Implementation
