@@ -6,17 +6,19 @@ import java.util.*;
 import java.io.IOException;
 
 public class TransportManager {
-    
+
     private Set<Vehicle> registeredVehicles;
     private Map<String, List<Taxi>> taxisByZone;
     private Map<String, Route> routes;
-    private List<Passenger> passengers;
+
+    // Generic repository used for type-safe passenger management
+    private TransportRepository<Passenger> passengerRepository;
 
     public TransportManager() {
         this.registeredVehicles = new HashSet<>();
         this.taxisByZone = new HashMap<>();
         this.routes = new HashMap<>();
-        this.passengers = new ArrayList<>();
+        this.passengerRepository = new TransportRepository<>("Passenger");
     }
 
     public boolean registerVehicle(Vehicle vehicle) {
@@ -110,23 +112,24 @@ public class TransportManager {
         return new HashMap<>(routes);
     }
 
+    // Passenger management using generic TransportRepository<Passenger>
     public void addPassenger(Passenger passenger) {
         if (passenger == null) {
             throw new IllegalArgumentException("Passenger cannot be null");
         }
-        passengers.add(passenger);
+        passengerRepository.add(passenger);
     }
 
     public boolean removePassenger(Passenger passenger) {
-        return passengers.remove(passenger);
+        return passengerRepository.remove(passenger);
     }
 
     public List<Passenger> getAllPassengers() {
-        return new ArrayList<>(passengers);
+        return passengerRepository.getAll();
     }
 
     public Passenger findPassengerById(String id) {
-        for (Passenger p : passengers) {
+        for (Passenger p : passengerRepository.getAll()) {
             if (p.getId().equals(id)) {
                 return p;
             }
@@ -138,27 +141,27 @@ public class TransportManager {
         try {
             List<String> vehicleData = new ArrayList<>();
             for (Vehicle vehicle : registeredVehicles) {
-                String vehicleInfo = vehicle.getPlateNumber() + "|" + 
-                                   vehicle.getClass().getSimpleName() + "|" + 
-                                   vehicle.getFuelLevel();
+                String vehicleInfo = vehicle.getPlateNumber() + "|" +
+                        vehicle.getClass().getSimpleName() + "|" +
+                        vehicle.getFuelLevel();
                 vehicleData.add(vehicleInfo);
             }
             DataPersistence.saveVehicles(vehicleData);
-            
+
             Map<String, String> routeData = new HashMap<>();
             for (Map.Entry<String, Route> entry : routes.entrySet()) {
                 routeData.put(entry.getKey(), entry.getValue().toFileString());
             }
             DataPersistence.saveRoutes(routeData);
-            
+
             List<String> passengerData = new ArrayList<>();
-            for (Passenger p : passengers) {
+            for (Passenger p : passengerRepository.getAll()) {
                 passengerData.add(p.toFileString());
             }
             DataPersistence.savePassengers(passengerData);
-            
+
             DataPersistence.appendLog("System data saved successfully");
-            
+
         } catch (IOException e) {
             System.err.println("Error saving data: " + e.getMessage());
         }
@@ -175,19 +178,19 @@ public class TransportManager {
                     System.err.println("Error loading route: " + entry.getKey());
                 }
             }
-            
+
             List<String> passengerData = DataPersistence.loadPassengers();
             for (String passengerStr : passengerData) {
                 try {
                     Passenger p = Passenger.fromFileString(passengerStr);
-                    passengers.add(p);
+                    passengerRepository.add(p);
                 } catch (Exception e) {
                     System.err.println("Error loading passenger");
                 }
             }
-            
+
             DataPersistence.appendLog("System data loaded successfully");
-            
+
         } catch (IOException e) {
             System.err.println("Error loading data: " + e.getMessage());
         }
