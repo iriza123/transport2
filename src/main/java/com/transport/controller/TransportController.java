@@ -115,11 +115,19 @@ public class TransportController {
 
     public String addRoute(String routeId, String origin, String destination, double distance) {
         try {
+            if (routeId == null || routeId.trim().isEmpty()) {
+                return "Error: Route ID cannot be empty";
+            }
+            if (manager.hasRoute(routeId)) {
+                return "Error: Route ID already exists";
+            }
             Route route = new Route(origin, destination, distance);
             manager.addRoute(routeId, route);
             updateRouteList();
-            return "Success: Route added";
+            return "Success: Route " + routeId + " added (" + origin + " to " + destination + ")";
         } catch (InvalidRouteException e) {
+            return "Error: " + e.getMessage();
+        } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }
