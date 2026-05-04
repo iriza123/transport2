@@ -1,0 +1,8 @@
+=== TRANSPORT SYSTEM - ROUTE DATA ===
+Generated: Mon May 04 10:30:50 SAST 2026
+Total Routes: 3
+======================================
+
+R002|Kigali|Musanze|90.0
+R003|Huye|Butare|15.0
+R001|Kigali|Huye|130.0

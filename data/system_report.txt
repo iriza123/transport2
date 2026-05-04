@@ -1,0 +1,22 @@
+╔════════════════════════════════════════════════════════════╗
+║           TRANSPORT SYSTEM - FULL REPORT                  ║
+╚════════════════════════════════════════════════════════════╝
+
+Generated: Tue Apr 28 23:02:55 SAST 2026
+
+===== REGISTERED VEHICLES (5) =====
+- RAB123A (Bus) - Fuel: 50
+- RAD789C (Train) - Fuel: 100
+- RAC456B (Taxi) - Fuel: 40
+- RAC789D (Taxi) - Fuel: 35
+- RAB456B (Bus) - Fuel: 60
+
+===== AVAILABLE ROUTES (3) =====
+- R002: Kigali → Musanze (90.0 km)
+- R003: Huye → Butare (15.0 km)
+- R001: Kigali → Huye (130.0 km)
+
+===== TAXI ZONES (3) =====
+- Airport: 1 taxis
+- Central: 2 taxis
+- Downtown: 1 taxis
