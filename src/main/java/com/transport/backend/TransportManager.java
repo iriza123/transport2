@@ -11,7 +11,7 @@ public class TransportManager {
     private Map<String, List<Taxi>> taxisByZone;
     private Map<String, Route> routes;
 
-    // Generic repository used for type-safe passenger management
+
     private TransportRepository<Passenger> passengerRepository;
 
     public TransportManager() {
@@ -112,7 +112,6 @@ public class TransportManager {
         return new HashMap<>(routes);
     }
 
-    // Passenger management using generic TransportRepository<Passenger>
     public void addPassenger(Passenger passenger) {
         if (passenger == null) {
             throw new IllegalArgumentException("Passenger cannot be null");

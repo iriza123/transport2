@@ -1,6 +1,7 @@
 package com.transport.ui.components;
 
 import com.transport.controller.TransportController;
+import com.transport.ui.MainView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -10,11 +11,13 @@ public class RoutePanel {
 
     private VBox root;
     private TransportController controller;
+    private MainView mainView;
     private ListView<String> routeListView;
     private Label statusLabel;
 
-    public RoutePanel(TransportController controller) {
+    public RoutePanel(TransportController controller, MainView mainView) {
         this.controller = controller;
+        this.mainView = mainView;
         initializeUI();
     }
 
@@ -103,42 +106,52 @@ public class RoutePanel {
 
             String result = controller.addRoute(routeId, origin, dest, distance);
             showStatus(result, result.startsWith("Success"));
-
             if (result.startsWith("Success")) {
-                idField.clear();
-                originField.clear();
-                destField.clear();
-                distField.clear();
+                idField.clear(); originField.clear(); destField.clear(); distField.clear();
+                mainView.refreshStats();
             }
         });
 
         removeBtn.setOnAction(e -> {
             String selected = routeListView.getSelectionModel().getSelectedItem();
-            if (selected == null) {
-                showStatus("Error: Please select a route to remove", false);
-                return;
-            }
+            if (selected == null) { showStatus("Error: Select a route to remove", false); return; }
             String routeId = selected.split(":")[0].trim();
             String result = controller.removeRoute(routeId);
             showStatus(result, result.startsWith("Success"));
+            if (result.startsWith("Success")) mainView.refreshStats();
         });
 
         Label listLabel = new Label("Available Routes:");
         listLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1A237E;");
 
         routeListView = new ListView<>(controller.getRouteList());
-        routeListView.setPrefHeight(250);
+        routeListView.setPrefHeight(200);
+        routeListView.setMaxWidth(Double.MAX_VALUE);
         routeListView.setStyle("-fx-background-color: linear-gradient(to bottom, #E8EAF6, #FFEBEE); " +
                 "-fx-border-color: linear-gradient(to right, #EF5350, #5C6BC0); " +
                 "-fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10;");
 
+        HBox searchBox = new HBox(10);
+        searchBox.setAlignment(Pos.CENTER_LEFT);
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search by Route ID");
+        searchField.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(searchField, Priority.ALWAYS);
+        Button searchBtn = new Button("Search");
+        searchBtn.setStyle("-fx-background-color: linear-gradient(to right, #EF5350, #5C6BC0); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 8 20;");
+        searchBox.getChildren().addAll(searchField, searchBtn);
+
+        Button sortBtn = new Button("Sort by Distance");
+        sortBtn.setStyle("-fx-background-color: linear-gradient(to right, #EF5350, #5C6BC0); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 8 20;");
+
+        searchBtn.setOnAction(e -> { String r = controller.searchRoute(searchField.getText()); showStatus(r, r.startsWith("Found")); });
+        sortBtn.setOnAction(e -> { controller.sortRoutesByDistance(); showStatus("Sorted by distance (shortest first)", true); });
+
         root.getChildren().addAll(
-                titleLabel,
-                inputGrid,
-                buttonBox,
-                statusLabel,
-                listLabel,
-                routeListView
+                titleLabel, inputGrid, buttonBox,
+                new Separator(),
+                searchBox, sortBtn,
+                statusLabel, listLabel, routeListView
         );
     }
 

@@ -2,6 +2,7 @@ package com.transport.ui.components;
 
 import com.transport.backend.*;
 import com.transport.controller.TransportController;
+import com.transport.ui.MainView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -11,10 +12,12 @@ public class BookingPanel {
 
     private VBox root;
     private TransportController controller;
+    private MainView mainView;
     private Label statusLabel;
 
-    public BookingPanel(TransportController controller) {
+    public BookingPanel(TransportController controller, MainView mainView) {
         this.controller = controller;
+        this.mainView = mainView;
         initializeUI();
     }
 
@@ -100,11 +103,7 @@ public class BookingPanel {
 
             String result = controller.boardBus(passenger, bus);
             showStatus(result, result.startsWith("Success"));
-
-            if (result.startsWith("Success")) {
-                passengerBoardField.clear();
-                busPlateField.clear();
-            }
+            if (result.startsWith("Success")) { passengerBoardField.clear(); busPlateField.clear(); mainView.refreshStats(); }
         });
 
         // --- ALIGHT BUS SECTION ---
@@ -173,11 +172,7 @@ public class BookingPanel {
 
             String result = controller.alightBus(passenger, bus);
             showStatus(result, result.startsWith("Success"));
-
-            if (result.startsWith("Success")) {
-                passengerAlightField.clear();
-                busAlightField.clear();
-            }
+            if (result.startsWith("Success")) { passengerAlightField.clear(); busAlightField.clear(); mainView.refreshStats(); }
         });
 
         // Status label

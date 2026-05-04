@@ -12,12 +12,6 @@ public class MainView {
     private BorderPane root;
     private TransportController controller;
 
-    private VehiclePanel vehiclePanel;
-    private PassengerPanel passengerPanel;
-    private RoutePanel routePanel;
-    private TaxiPanel taxiPanel;
-    private BookingPanel bookingPanel;
-
     public MainView() {
         controller = new TransportController();
         initializeUI();
@@ -26,48 +20,53 @@ public class MainView {
     private void initializeUI() {
         root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #E3F2FD, #FFEBEE);");
-
         root.setTop(createHeader());
         root.setCenter(createTabPane());
         root.setBottom(createStatusBar());
     }
 
     private VBox createHeader() {
-        VBox header = new VBox(8);
+        VBox header = new VBox(6);
         header.setAlignment(Pos.CENTER);
-        header.setPadding(new Insets(18, 20, 18, 20));
+        header.setPadding(new Insets(15, 20, 15, 20));
         header.setStyle("-fx-background-color: linear-gradient(to right, #EF5350, #5C6BC0); " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);");
 
         Label title = new Label("Transport Management System");
-        title.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: white;");
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
         title.setWrapText(true);
 
         header.getChildren().add(title);
         return header;
     }
 
+    public void refreshStats() {
+    }
+
     private TabPane createTabPane() {
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPane.setTabMinWidth(90);
+        tabPane.setTabMinWidth(80);
 
-        vehiclePanel = new VehiclePanel(controller);
+        VehiclePanel vehiclePanel = new VehiclePanel(controller, this);
         Tab vehicleTab = new Tab("Vehicles", wrapInScroll(vehiclePanel.getView()));
 
-        passengerPanel = new PassengerPanel(controller);
+        PassengerPanel passengerPanel = new PassengerPanel(controller, this);
         Tab passengerTab = new Tab("Passengers", wrapInScroll(passengerPanel.getView()));
 
-        routePanel = new RoutePanel(controller);
+        RoutePanel routePanel = new RoutePanel(controller, this);
         Tab routeTab = new Tab("Routes", wrapInScroll(routePanel.getView()));
 
-        taxiPanel = new TaxiPanel(controller);
+        TaxiPanel taxiPanel = new TaxiPanel(controller);
         Tab taxiTab = new Tab("Taxi Zones", taxiPanel.getView());
 
-        bookingPanel = new BookingPanel(controller);
+        BookingPanel bookingPanel = new BookingPanel(controller, this);
         Tab bookingTab = new Tab("Bookings", wrapInScroll(bookingPanel.getView()));
 
-        tabPane.getTabs().addAll(vehicleTab, passengerTab, routeTab, taxiTab, bookingTab);
+        LogPanel logPanel = new LogPanel(controller);
+        Tab logTab = new Tab("Activity Log", wrapInScroll(logPanel.getView()));
+
+        tabPane.getTabs().addAll(vehicleTab, passengerTab, routeTab, taxiTab, bookingTab, logTab);
         return tabPane;
     }
 
@@ -98,7 +97,8 @@ public class MainView {
                 "-fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 8 20;");
         saveButton.setOnAction(e -> {
             controller.saveAllData();
-            statusLabel.setText("Data saved successfully");
+            statusLabel.setText("Data saved");
+            refreshStats();
         });
 
         Button loadButton = new Button("Load Data");
@@ -107,14 +107,13 @@ public class MainView {
                 "-fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 8 20;");
         loadButton.setOnAction(e -> {
             controller.loadAllData();
-            statusLabel.setText("Data loaded successfully");
+            statusLabel.setText("Data loaded");
+            refreshStats();
         });
 
         statusBar.getChildren().addAll(statusLabel, spacer, saveButton, loadButton);
         return statusBar;
     }
 
-    public BorderPane getView() {
-        return root;
-    }
+    public BorderPane getView() { return root; }
 }
